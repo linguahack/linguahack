@@ -1,0 +1,30 @@
+
+<section id="header">
+	<div class="row">
+		<div class="col-md-4">
+			<img src="/img/sam.png" class="sam pull-right" alt="">
+		</div>
+		<div class="col-md-8 text-center">
+			<h2>english motherfucker!<br>do you speak it?</h2>
+			<p>-linguahack.tv-</p>
+			<div class="media clearfix">
+				<a href="" class=" soc twitter"></a>
+				<a href="" class=" soc fb"></a>
+				<a href="" class=" soc vk"></a>
+			</div>
+		</div>
+	</div>
+</section>
+<section class="about">
+	<div class="container">
+		<h2>Learning English can be fun and addictive! Check out our <a href="/about"> How it works </a>page and start getting better at English today.</h2>
+	</div>	
+</section>
+<div>
+	<div class="row container show-list">
+        <div class="show col-md-3" ng-repeat="serial in serials">
+        	<a ng-href="/serials/{{serial.url}}"><img ng-src="{{serial.poster}}"></a>
+            <a ng-href="/serials/{{serial.url}}" ng-bind="serial.name"></a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+{
+  "name": "Linguahack",
+  "description": "Learn English with fun",
+  "version": "0.1",
+  "manifest_version": 2,
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "icons": { "16": "img/favicon.ico", "128": "img/linguahack-128.png" }
+}

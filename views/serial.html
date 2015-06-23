@@ -1,0 +1,37 @@
+
+<div>
+    <div class="screen" ng-style="{'background-image': 'url(http://image.tmdb.org/t/p/original' + serial.tmdb.backdrop_path + ')'}">
+      <div class="serial_description">
+        <div class="clearfix">
+          <h4 ng-bind="serial.name"></h4>
+          <a ng-href="{{serial.imdb.full_url}}"><h4 ng-bind="serial.imdb.rating"></h4></a>
+        </div>
+        <p ng-bind="serial.imdb.description"></p>
+      </div>
+    </div>
+    <div class="serial_title">
+      <h2 class="serial-name" ng-bind="serial.name"></h2>
+        <div class="dropdown choose_season">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+                Season <span ng-bind='season.number'></span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+                <li role="presentation" ng-repeat="season in serial.seasons">
+                  <a role="menuitem" tabindex="-1" ng-click="select_season($index)">Season <span ng-bind='season.number'></span></a>
+                </li>
+
+              </ul>
+        </div>
+    </div>
+    <section class="playerSection">
+        <div class="main-wrapper clearfix">
+            <div class="episodes">
+              <div ng-repeat="episode in season.episodes" ng-bind="episode.name" ng-click="select_episode($index);play_video()"></div>
+            </div>
+            <div class="player-wrapper">
+              <video controls="" name="media" style="width: 100%;"></video>
+            </div>
+        </div>
+    </section>
+</div>
