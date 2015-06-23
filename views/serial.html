@@ -27,7 +27,7 @@
     <section class="playerSection">
         <div class="main-wrapper clearfix">
             <div class="episodes">
-              <div ng-repeat="episode in season.episodes" ng-bind="episode.name" ng-click="select_episode($index);play_video()"></div>
+              <div ng-repeat="episode in season.episodes" ng-bind="episode.name" ng-click="select_episode($index).then(play_video)"></div>
             </div>
             <div class="player-wrapper">
               <video controls="" name="media" style="width: 100%;"></video>

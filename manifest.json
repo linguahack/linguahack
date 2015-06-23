@@ -8,5 +8,8 @@
       "scripts": ["background.js"]
     }
   },
+  "permissions" : [
+    "http://fs.to/"
+  ],
   "icons": { "16": "img/favicon.ico", "128": "img/linguahack-128.png" }
 }
