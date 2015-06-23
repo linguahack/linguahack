@@ -13,10 +13,12 @@
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <script src="/bower_components/angular/angular.min.js"></script>
-    <script src="/bower_components/angular-route/angular-route.min.js"></script>
+    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="/scripts/routes.js"></script>
+    <script src="/scripts/tools/getImage.js"></script>
     <script src="/scripts/api.js"></script>
-    <script src="/scripts/index.js"></script>
+    <script src="/scripts/homeCtrl.js"></script>
+    <script src="/scripts/serialCtrl.js"></script>
 <!-- 
     <link href='http://fonts.googleapis.com/css?family=Amatic+SC:700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet' type='text/css'> -->
@@ -31,7 +33,7 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" id="navbarBrand" href="/">LinguaHack</a>
+            <a class="navbar-brand" id="navbarBrand" ui-sref="home">LinguaHack</a>
           </div>
           <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right" id="navbarRest">
@@ -42,7 +44,7 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-    <div ng-view></div>
+    <div ui-view></div>
     <div class="footer">
       <p>&copy; Lingua Hack 2015</p>
     </div>

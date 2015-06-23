@@ -2,26 +2,27 @@
 
 (function() {
 
-  var linguahack = angular.module('linguahack', ['ngRoute']);
+  var linguahack = angular.module('linguahack', ['ui.router']);
 
-  linguahack.config(['$routeProvider', '$locationProvider', router]);
+  linguahack.config(['$stateProvider', '$locationProvider', router]);
 
-  function router($routeProvider, $locationProvider) {
-    $locationProvider.html5Mode(true);
-    $routeProvider
-    .when('/', {
+  function router($stateProvider, $locationProvider) {
+
+    $locationProvider.html5Mode(false);
+
+    $stateProvider
+    .state('home', {
+      url: "",
       templateUrl: '/views/home.html',
       controller: 'HomeCtrl'
     })
-    .when('/about', {
+    .state('about', {
       templateUrl: '/views/about.html'
     })
-    .when('/serials/:serial', {
+    .state('serial', {
+      url: '/serial/:url',
       templateUrl: '/views/serial.html',
       controller: 'SerialCtrl'
-    })
-    .otherwise({
-      redirectTo: '/'
     });
   }
 })();

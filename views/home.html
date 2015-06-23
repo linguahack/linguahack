@@ -17,14 +17,14 @@
 </section>
 <section class="about">
 	<div class="container">
-		<h2>Learning English can be fun and addictive! Check out our <a href="/about"> How it works </a>page and start getting better at English today.</h2>
+		<h2>Learning English can be fun and addictive! Check out our <a ui-sref="about"> How it works </a>page and start getting better at English today.</h2>
 	</div>	
 </section>
 <div>
 	<div class="row container show-list">
         <div class="show col-md-3" ng-repeat="serial in serials">
-        	<a ng-href="/serials/{{serial.url}}"><img ng-src="{{serial.poster}}"></a>
-            <a ng-href="/serials/{{serial.url}}" ng-bind="serial.name"></a>
+        	<a ui-sref="serial({url: serial.url})"><img ng-src="{{serial.poster}}"></a>
+            <a ui-sref="serial({url: serial.url})" ng-bind="serial.name"></a>
         </div>
     </div>
 </div>
