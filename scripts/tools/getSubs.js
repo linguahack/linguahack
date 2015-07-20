@@ -4,10 +4,10 @@ var linguahack = angular.module('linguahack');
 linguahack.factory('getSubs', ['$http', '$q', getSubs]);
 
 function getSubs($http, $q) {
-  return function(url) {
+  return function(opensubtitlesGzUrl, apiHost) {
     return $q(function(resolve, reject) {
       var xhr = new XMLHttpRequest();
-      xhr.open('GET', url);
+      xhr.open('GET', apiHost + '/subtitles/convert?url=' + opensubtitlesGzUrl);
       // xhr.responseType = 'blob';
       xhr.onload = function (e) {
         resolve(getVttCues(this.response));

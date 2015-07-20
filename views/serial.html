@@ -32,6 +32,11 @@
             <div class="player-wrapper">
               <video controls="" name="media" style="width: 100%;"></video>
             </div>
+            <div class="subtitles-list">
+              <div ng-repeat="subs in episode.opensubtitles">
+                <a ng-bind="subs.SubFileName" ng-click="select_subtitles($index)"></a>
+              </div>
+            </div>
         </div>
     </section>
 </div>

@@ -21,6 +21,10 @@
 
       serialCheckFsto: function(serialUrl) {
         return $http.get(host + '/serial/' + serialUrl + '/check_fsto');
+      },
+
+      getHost: function() {
+        return host;
       }
 
     }

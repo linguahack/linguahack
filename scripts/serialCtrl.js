@@ -66,23 +66,31 @@ linguahack.controller('SerialCtrl', function($scope, $stateParams, Api, getImage
   };
   
   var video_element = document.getElementsByTagName('video')[0];
+  var textTrack;
 
-  $scope.play_video = function() {
-    var trackLink = "http://localhost:3001/subtitles/convert?url=http://dl.opensubtitles.org/en/download/filead/src-api/vrf-76d465b636/sid-o7ffub6vac18rr8gtihkft2lu3/1953389177.gz";
+  $scope.select_subtitles = function(number) {
+    var trackLink = $scope.episode.opensubtitles[number].SubDownloadLink;
 
-    getSubs(trackLink)
+    return getSubs(trackLink, Api.getHost())
     .then(function(cues) {
-      video_element.src = $scope.episode.link;
 
-      var newTextTrack = video_element.addTextTrack("captions", "English", "en");
-      newTextTrack.mode = "showing";
-      for(var i = 0; i < cues.length; ++i) {
-        newTextTrack.addCue(cues[i]);
+      if (textTrack) {
+        textTrack.mode = "hidden";
       }
 
-      video_element.load();
-      video_element.play();
+      textTrack = video_element.addTextTrack("captions", "English", "en");
+      textTrack.mode = "showing";
+      for(var i = 0; i < cues.length; ++i) {
+        textTrack.addCue(cues[i]);
+      }
+
     })
+  }
+
+  $scope.play_video = function() {
+    video_element.src = $scope.episode.link;
+    video_element.load();
+    video_element.play();
   };
 
 
