@@ -37,7 +37,7 @@ function fsParse($http) {
   };
 }
 
-linguahack.controller('SerialCtrl', function($scope, $stateParams, Api, getImage, fsParse) {
+linguahack.controller('SerialCtrl', function($scope, $stateParams, Api, getImage, getSubs, fsParse) {
   var serialUrl = $stateParams.url;
 
   var handle_serial = function(serial) {
@@ -49,9 +49,6 @@ linguahack.controller('SerialCtrl', function($scope, $stateParams, Api, getImage
     $scope.select_season(0);
   };
 
-  var video_element = document.getElementsByTagName('video')[0];
-
-
   $scope.select_season = function(number) {
     $scope.serial.seasons[number].episodes.sort(function(first, second) {
       return first.number - second.number;
@@ -59,18 +56,33 @@ linguahack.controller('SerialCtrl', function($scope, $stateParams, Api, getImage
     $scope.season = $scope.serial.seasons[number];
     $scope.select_episode(0);
   };
+
   $scope.select_episode = function(number) {
     return fsParse($scope.serial, $scope.season.episodes[number].fsto.files[0], $scope.season.episodes[number].number)
     .then(function(result) {
-      console.log(result);
       $scope.season.episodes[number].link = 'http://fs.to' + result.link;
       $scope.episode = $scope.season.episodes[number];
     })
   };
+  
+  var video_element = document.getElementsByTagName('video')[0];
+
   $scope.play_video = function() {
-    video_element.src = $scope.episode.link;
-    video_element.load();
-    video_element.play();
+    var trackLink = "http://localhost:3001/subtitles/convert?url=http://dl.opensubtitles.org/en/download/filead/src-api/vrf-76d465b636/sid-o7ffub6vac18rr8gtihkft2lu3/1953389177.gz";
+
+    getSubs(trackLink)
+    .then(function(cues) {
+      video_element.src = $scope.episode.link;
+
+      var newTextTrack = video_element.addTextTrack("captions", "English", "en");
+      newTextTrack.mode = "showing";
+      for(var i = 0; i < cues.length; ++i) {
+        newTextTrack.addCue(cues[i]);
+      }
+
+      video_element.load();
+      video_element.play();
+    })
   };
 
 
