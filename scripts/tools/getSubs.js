@@ -43,16 +43,16 @@ function parseCue(linesArray, index) {
   }
   var rangeRegex = /^(\d+:\d{2}:\d{2}\.\d{3}) --> (\d+:\d{2}:\d{2}\.\d{3})/;
   var range = rangeRegex.exec(linesArray[index]);
-  var message = "";
+  var message = [];
   var nextLine;
   for( ++index; linesArray[index]; ++index) {
-    message += linesArray[index];
+    message.push(linesArray[index]);
   }
   if(!range) {
     return {index: index};
   }
   return {
-    cue: new VTTCue(timeToSeconds(range[1]), timeToSeconds(range[2]), message),
+    cue: new VTTCue(timeToSeconds(range[1]), timeToSeconds(range[2]), message.join('\n')),
     index: index
   };
 }
