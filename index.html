@@ -9,17 +9,6 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
 
-    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-
-    <script src="/bower_components/angular/angular.min.js"></script>
-    <script src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script src="/scripts/routes.js"></script>
-    <script src="/scripts/tools/getImage.js"></script>
-    <script src="/scripts/tools/getSubs.js"></script>
-    <script src="/scripts/api.js"></script>
-    <script src="/scripts/homeCtrl.js"></script>
-    <script src="/scripts/serialCtrl.js"></script>
 <!-- 
     <link href='http://fonts.googleapis.com/css?family=Amatic+SC:700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Oswald:400,300' rel='stylesheet' type='text/css'> -->
@@ -45,10 +34,14 @@
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
-    <div ui-view></div>
+      
+      <div id="mainContent"></div>
+
+
     <div class="footer">
       <p>&copy; Lingua Hack 2015</p>
     </div>
 
+    <script src="/dist/bundle.js"></script>
 </body>
 </html>
