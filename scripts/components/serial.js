@@ -46,6 +46,7 @@ export default class Serial extends React.Component {
     return fsParse(this.state.serial.fsto.id, this.state.episode.fsto.files[0].file_id, this.state.episode.number)
     .then((result) => {
       this.state.episode.link = 'http://fs.to' + result.link;
+      console.log(result.link);
       this.setState(this.state);
     });
   }
@@ -78,8 +79,8 @@ export default class Serial extends React.Component {
   }
 
   handleEpisodeClick(number) {
-    this.selectEpisode(number);
-    this.playVideo();
+    this.selectEpisode(number)
+    .then(() => this.playVideo());
   }
 
   render() {
