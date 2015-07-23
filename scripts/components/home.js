@@ -1,32 +1,56 @@
 
 import React from 'react';
+import {Link} from 'react-router';
+import api from '../tools/api';
 
 import subHeaderTemplate from '../../views/homeSubheader.html';
 
-export var SubHeader = React.createClass({
-  render: function () {
+class SubHeader extends React.Component {
+  render() {
     return (
-			<div dangerouslySetInnerHTML={{__html: subHeaderTemplate}}/>
+      <div dangerouslySetInnerHTML={{__html: subHeaderTemplate}}/>
     );
   }
-});
+}
 
-export var Home = React.createClass({
-  render: function () {
+class Serial extends React.Component {
+  render() {
     return (
-				<div>
-					<SubHeader/>
-					<div>
-						<div className="row container show-list">
-					        <div className="show col-md-3" ng-repeat="serial in serials">
-					        	<a ui-sref="serial({url: serial.url})"><img ng-src="{{serial.poster}}"/></a>
-					            <a ui-sref="serial({url: serial.url})" ng-bind="serial.name"></a>
-					        </div>
-					    </div>
-					</div>
-				</div>
+      <div className="show col-md-3">
+        <Link to="serial" params={{url: this.props.data.url}}>
+          <img src={"http://image.tmdb.org/t/p/w342/" + this.props.data.tmdb.poster_path}/>
+        </Link>
+        <Link to="serial" params={{url: this.props.data.url}}>
+          {this.props.data.name}
+        </Link>
+      </div>
     );
   }
-});
+}
 
-export default Home;
+export default class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {serials: []};
+  }
+
+  componentDidMount() {
+    api.serials()
+    .then((result) => {
+      this.setState({serials: result});
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <SubHeader/>
+        <div>
+          <div className="row container show-list">
+            { this.state.serials.map((serial) => <Serial data={serial} key={serial.url}/>)}
+          </div>
+        </div>
+      </div>
+    );
+  }
+}

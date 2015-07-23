@@ -1,21 +1,16 @@
 
-var linguahack = angular.module('linguahack');
 
-linguahack.factory('getSubs', ['$http', '$q', getSubs]);
-
-function getSubs($http, $q) {
-  return function(opensubtitlesGzUrl, apiHost) {
-    return $q(function(resolve, reject) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', apiHost + '/subtitles/convert?url=' + opensubtitlesGzUrl);
-      // xhr.responseType = 'blob';
-      xhr.onload = function (e) {
-        resolve(getVttCues(this.response));
-      };
-      xhr.send();
-    });
-  };
-}
+export default function(opensubtitlesGzUrl, apiHost) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', apiHost + '/subtitles/convert?url=' + opensubtitlesGzUrl);
+    // xhr.responseType = 'blob';
+    xhr.onload = function (e) {
+      resolve(getVttCues(this.response));
+    };
+    xhr.send();
+  });
+};
 
 function getVttCues(subtitles) {
   var linesArray = subtitles.split('\r\n');
