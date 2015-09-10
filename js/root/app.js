@@ -7,25 +7,25 @@ import Serial from '../components/serial';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
-function Handler(state, actions) {
-  switch(state.view) {
+function Handler(props) {
+  switch(props.state.view) {
     case 'index':
-      return Home(state, actions);
+      return Home(props);
     case 'about':
-      return About(state, actions);
+      return About(props);
     case 'serial':
-      return Serial(state, actions);
+      return Serial(props);
   }
 }
 
-export default function App(state, actions) {
-  console.log(`state: `, state)
-  const handler = Handler(state, actions);
+export default function App(props) {
+  console.log(`state: `, props.state)
+  const handler = Handler(props);
   if (handler) {
     return <div>
-      { Header(state, actions) }
-      { Handler(state, actions) }
-      { Footer(state, actions) }
+      { Header(props) }
+      { Handler(props) }
+      { Footer(props) }
     </div>
   } else {
     return <div>404</div>

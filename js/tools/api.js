@@ -12,7 +12,7 @@ export function serials() {
 }
 
 export function serial(serialUrl) {
-  return fetch(HOST + '/serial/id/' + serialUrl)
+  return fetch(HOST + '/serials/id/' + serialUrl)
   .then(function(result) {
     return result.json();
   });

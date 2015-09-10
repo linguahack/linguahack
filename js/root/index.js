@@ -3,41 +3,42 @@
 import React, { Component } from 'react';
 import * as browser from '../lib/browser';
 import Store from '../lib/store'
+import Router from './router';
 import * as actions from './actions';
 import * as reducers from './reducers';
 import App from './app';
 
-const fromBrowserData = function({token, pathname}) {
-  const actions = this.actions;
-  const view = {
-    '/': () => actions.goTo('index'),
-    '/about': () => actions.goTo('about')
-  }
-  view[pathname] && view[pathname]();
-}
 
-const browserData = function(state) {
-  return {token: state.token, pathname: null};
-}
 
 class Root extends Component {
   constructor() {
     super();
     this.store = new Store({reducers, actions})
+    this.router = new Router(this.store);
 
     browser.history.listen((location) => {
       if (location.action != "PUSH") {
-        this.store::fromBrowserData(browser.getData());
+        this.fromBrowserData(browser.getData());
       }
     })
 
     this.store.subscribe(::this.forceUpdate);
+    this.Link = this.router.getLink();
   }
 
   render() {
     const state = this.store.state;
-    browser.setData(browserData(state));
-    return App(state, this.store.actions);
+    browser.setData(this.toBrowserData(state));
+    return App({state, actions: this.store.actions, Link: this.Link});
+  }
+
+  fromBrowserData({token, pathname}) {
+    this.router.fromPathname(pathname);
+  }
+
+  toBrowserData() {
+    const state = this.store.state;
+    return {token: state.token, pathname: state.pathname};
   }
 }
 

@@ -1,6 +1,6 @@
 
 export default class Store {
-  constructor({reducers, initialState, actions, props}) {
+  constructor({reducers, initialState, actions}) {
     this._reducers = reducers;
     this._state = initialState || {};
     this._callback = function(){};

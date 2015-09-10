@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-function SubHeader(state, actions) {
+function SubHeader({Link}) {
   return <div>
     <section id="header">
       <div className="row">
@@ -22,29 +22,30 @@ function SubHeader(state, actions) {
     <section className="about">
       <div className="container">
         <h2>Learning English can be fun and addictive! Check out our 
-        <a href="/about" onClick={actions.Link('about')}> How it works </a>page and start getting better at English today.</h2>
+        <Link view="about"> How it works </Link>page and start getting better at English today.</h2>
       </div>  
     </section>
   </div>
 }
 
-function Serial(serial, link) {
+function Serial(serial, {Link}) {
   return <div className="show col-md-3" key={serial.url}>
-    <a href="" onClick={link}>
+    <Link view='serial' params={{url: serial.url}}>
       <img src={"http://image.tmdb.org/t/p/w342/" + serial.tmdb.poster_path}/>
-    </a>
-    <a href="" onClick={link}>
+    </Link>
+    <Link view='serial' params={{url: serial.url}}>
       {serial.name}
-    </a>
+    </Link>
   </div>
 }
 
-export default function Home(state, actions) {
+export default function Home(props) {
+  const {state, Link} = props;
   return <div>
-    { SubHeader(state, actions) }
+    { SubHeader(props) }
     <div>
       <div className="row container show-list">
-        { state.serials && state.serials.map( (serial) => Serial(serial, actions.Link('serial', {url: serial.url})) ) }
+        { state.serials && state.serials.map( (serial) => Serial(serial, props) ) }
       </div>
     </div>
   </div>

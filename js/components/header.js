@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-export default function(state, actions) {
+export default function({Link}) {
   return <nav className="navbar navbar-default">
         <div className="container-fluid">
           <div className="navbar-header">
@@ -11,7 +11,7 @@ export default function(state, actions) {
               <span className="icon-bar"></span>
               <span className="icon-bar"></span>
             </button>
-            <a className="navbar-brand" id="navbarBrand" href="/" onClick={actions.Link('index')}>LinguaHack</a>
+            <Link className="navbar-brand" id="navbarBrand" view="index">LinguaHack</Link>
           </div>
           <div id="navbar" className="navbar-collapse collapse">
             <ul className="nav navbar-nav navbar-right" id="navbarRest">

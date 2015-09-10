@@ -1,4 +1,4 @@
 
 
-export const changedView = (state, action) => ({...state, view: action.view, ...action.data})
+export const changedView = (state, action) => ({...state, ...action.state})
 
