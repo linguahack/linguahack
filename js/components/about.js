@@ -1,8 +1,8 @@
 
 import React from 'react';
 
-export default function() {
-  return <div className="container howto">
+export default () =>
+  <div className="container howto">
     <h2>Learn English with fun!</h2>
 
     <div className="row">
@@ -30,5 +30,4 @@ export default function() {
       </div>
     </div>
   </div>
-
-}
+  

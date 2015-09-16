@@ -21,14 +21,6 @@ function constructor(props) {
   };
 }
 
-function componentDidMount() {
-  api.serial(this.props.params.url)
-  .then((result) => {
-    this.state.serial = result;
-    this.selectSeason(0);
-    this.setState(this.state);
-  })
-}
 
 function selectSeason(number) {
   this.state.serial.seasons[number].episodes.sort(function(first, second) {
@@ -81,11 +73,14 @@ function handleEpisodeClick(number) {
   .then(() => this.playVideo());
 }
 
-export default {}::Serial;
-function Serial({state}) {
-  return "serial";
+const seasonClick = ({index, actions, state}, e) => {
+  e.preventDefault();
+  actions.selectSeason(state, index)
+}
+
+export default function Serial({state, Link, actions}) {
   const serial = state.serial;
-  const season = serial.seasons[0];
+  const season = state.season || serial.seasons[0];
   const episode = season.episodes[0];
   return (
     <div>
@@ -108,8 +103,8 @@ function Serial({state}) {
                 <ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
                 {
                   serial.seasons.map((season, index) => (
-                    <li role="presentation">
-                      <a role="menuitem" tabIndex="-1" onClick={this.selectSeason.bind(this, index)}>Season {season.number}</a>
+                    <li role="presentation" key={season.number}>
+                      <a role="menuitem" tabIndex="-1" onClick={seasonClick.bind(null, {index, actions, state})}>Season {season.number}</a>
                     </li>
                   )) 
                 }
@@ -121,18 +116,18 @@ function Serial({state}) {
               <div className="episodes">
               {
                 season.episodes.map((episode, index) => (
-                  <div onClick={this.handleEpisodeClick.bind(this, index)}>{episode.name}</div>
+                  <div key={index}>{episode.name}</div>
                 ))
               }
               </div>
               <div className="player-wrapper">
-                <video ref="videoElement" controls="" name="media" style={{width: '100%'}}></video>
+                <video controls="" name="media" style={{width: '100%'}}></video>
               </div>
               <div className="subtitles-list">
               {
                 episode.opensubtitles.map((subs, index) => (
-                  <div>
-                    <a onClick={this.selectSubtitles.bind(this, index)}>{subs.SubFileName}</a>
+                  <div key={index}>
+                    <a>{subs.SubFileName}</a>
                   </div>
                 ))
               }

@@ -28,12 +28,12 @@ function SubHeader({Link}) {
   </div>
 }
 
-function Serial(serial, {Link}) {
-  return <div className="show col-md-3" key={serial.url}>
-    <Link view='serial' params={{url: serial.url}}>
+function Serial({Link, serial}) {
+  return <div className="show col-md-3">
+    <Link view='serial' id={serial.url}>
       <img src={"http://image.tmdb.org/t/p/w342/" + serial.tmdb.poster_path}/>
     </Link>
-    <Link view='serial' params={{url: serial.url}}>
+    <Link view='serial' id={serial.url}>
       {serial.name}
     </Link>
   </div>
@@ -42,10 +42,10 @@ function Serial(serial, {Link}) {
 export default function Home(props) {
   const {state, Link} = props;
   return <div>
-    { SubHeader(props) }
+    <SubHeader {...props}/>
     <div>
       <div className="row container show-list">
-        { state.serials && state.serials.map( (serial) => Serial(serial, props) ) }
+        { state.serials && state.serials.map( (serial) => <Serial key={serial.url} serial={serial} {...props}/> ) }
       </div>
     </div>
   </div>

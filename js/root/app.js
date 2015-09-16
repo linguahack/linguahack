@@ -7,27 +7,24 @@ import Serial from '../components/serial';
 import Header from '../components/header';
 import Footer from '../components/footer';
 
-function Handler(props) {
+const wrap = (Handler, props) => (
+  <div>
+    <Header {...props}/>
+    <Handler {...props}/>
+    <Footer {...props}/>
+  </div>
+)
+
+const App = (props) => {
   switch(props.state.view) {
     case 'index':
-      return Home(props);
+      return wrap(Home, props)
     case 'about':
-      return About(props);
+      return wrap(About, props);
     case 'serial':
-      return Serial(props);
+      return wrap(Serial, props);
   }
+  return <div>404</div>
 }
 
-export default function App(props) {
-  console.log(`state: `, props.state)
-  const handler = Handler(props);
-  if (handler) {
-    return <div>
-      { Header(props) }
-      { Handler(props) }
-      { Footer(props) }
-    </div>
-  } else {
-    return <div>404</div>
-  }
-}
+export default App;

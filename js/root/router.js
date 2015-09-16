@@ -1,69 +1,75 @@
 
 import React, {Component} from 'react';
-import * as api from '../tools/api'
+import Store from '../lib/store'
 
+function getLink(router) {
+  class Link extends Component {
+    render() {
+      return React.createElement('a', this.getProps(), this.props.children);
+    }
+
+    onClick(e) {
+      e.preventDefault();
+      router.goTo(this.props.view, this.props);
+    }
+
+    getProps() {
+      return {...this.props, children: null, onClick: ::this.onClick, href: router.getPathname(this.props.view, this.props)}
+    }
+  }
+  return Link;
+}
 
 export default class Router {
-  constructor(store) {
-    this.store = store;
+  constructor(views) {
+    const changedView = (state, action) => ({...state, ...action.state});
+    this.store = new Store({reducers: {changedView}, actions: {}});
+
+    this._viewsByName = {};
+    views.forEach((view) => {this._viewsByName[view.name] = view})
+
+    this._viewsByPath = {};
+    this._viewsRegex = [];
+    views.forEach((view) => {
+      if ((typeof view.pathname) == 'string') {
+        this._viewsByPath[view.pathname] = view;
+      } else {
+        this._viewsRegex.push(view);
+      }
+    })
+
+    this.Link = getLink(this);
   }
 
-  getPathname(view, params) {
-    switch(view) {
-      case 'index': return '/';
-      case 'about': return '/about';
-      case 'serial': return `/serial/${params.url}`;
-      default: return "";
+  getPathname(viewName, params) {
+    const view = this._viewsByName[viewName];
+    if (view) {
+      if ((typeof view.pathname) == 'string') {
+        return view.pathname;
+      } else {
+        return view.pathname(params);
+      }
     }
+    return '';
   }
 
   fromPathname(pathname) {
-    const view = {
-      '/': () => this.goTo('index'),
-      '/about': () => this.goTo('about')
-    }
-    if (view[pathname] && view[pathname]()) return;
+    if (this._viewsByPath[pathname]) return this.goTo(this._viewsByPath[pathname].name);
 
-    switch (true) {
-      case /^\/serial\/(.*)/.test(pathname):
-        return this.goTo('serial', {url: pathname.match(/^\/serial\/(.*)/)[1]});
-    }
+    const view = this._viewsRegex.filter((view) => view.regex.test(pathname))[0];
+    return this.goTo(view.name, view.params(pathname.match(view.regex)));
   }
 
-  async goTo(view, params) {
-    switch (view) {
-      case 'index':
-        this.dispatch({view, pathname: this.getPathname(view, params)});
-        const serials = await api.serials();
-        return this.dispatch({serials});
-      case 'serial':
-        const serial = await api.serial(params.url);
-        return this.dispatch({serial, view, pathname: this.getPathname(view, params)});
-      default:
-        this.dispatch({view, pathname: this.getPathname(view, params)});
+  async goTo(viewName, params) {
+    const view = this._viewsByName[viewName];
+    if (view && view.goTo) {
+      view.goTo(::this.dispatch, params);
+    } else {
+      this.dispatch({view: viewName, pathname: this.getPathname(viewName, params)});
     }
   }
 
   dispatch(state) {
     this.store.dispatch({type: 'changedView', state});
-  }
-
-  getLink() {
-    const router = this;
-    class Link extends Component {
-      render() {
-        return React.createElement('a', this.getProps(), this.props.children);
-      }
-
-      onClick(e) {
-        e.preventDefault();
-        router.goTo(this.props.view, this.props.params);
-      }
-
-      getProps() {
-        return {...this.props, children: null, onClick: ::this.onClick, href: router.getPathname(this.props.view, this.props.params)}
-      }
-    }
-    return Link;
   }
 }
