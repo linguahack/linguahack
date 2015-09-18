@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-export default ({Link}) =>
+export default (props) =>
   <nav className="navbar navbar-default">
     <div className="container-fluid">
       <div className="navbar-header">
@@ -11,7 +11,7 @@ export default ({Link}) =>
           <span className="icon-bar"></span>
           <span className="icon-bar"></span>
         </button>
-        <Link className="navbar-brand" id="navbarBrand" view="index">LinguaHack</Link>
+        <a className="navbar-brand" id="navbarBrand" href="/" onClick={props.actions.linkClick({view: 'index'})}>LinguaHack</a>
       </div>
       <div id="navbar" className="navbar-collapse collapse">
         <ul className="nav navbar-nav navbar-right" id="navbarRest">

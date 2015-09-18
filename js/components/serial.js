@@ -1,35 +1,9 @@
 
-import React from 'react';
+import React, {Component} from 'react';
 import api from '../tools/api';
 import fsParse from '../tools/fsParse';
 import getSubs from '../tools/getSubs';
 
-
-function constructor(props) {
-  this.state = {
-    serial: {
-      imdb: {},
-      tmdb: {},
-      seasons: []
-    },
-    season: {
-      episodes: []
-    },
-    episode: {
-      opensubtitles: []
-    }
-  };
-}
-
-
-function selectSeason(number) {
-  this.state.serial.seasons[number].episodes.sort(function(first, second) {
-    return first.number - second.number;
-  });
-  this.state.season = this.state.serial.seasons[number];
-  this.setState(this.state);
-  this.selectEpisode(0);
-}
 
 function selectEpisode(number) {
   this.state.episode = this.state.season.episodes[number];
@@ -68,20 +42,27 @@ function playVideo() {
   videoElement.play();
 }
 
-function handleEpisodeClick(number) {
-  this.selectEpisode(number)
-  .then(() => this.playVideo());
+
+class Video extends Component {
+  render() {
+    return <video controls="" name="media" style={{width: '100%'}}></video>;
+  }
 }
 
-const seasonClick = ({index, actions, state}, e) => {
+const episodeClick = ({index, actions, state}) => {
+  actions.selectEpisode(index, state);
+}
+
+const seasonClick = ({index, actions}, e) => {
   e.preventDefault();
-  actions.selectSeason(state, index)
+  actions.selectSeason(index)
 }
 
-export default function Serial({state, Link, actions}) {
+export default function Serial(props) {
+  const {state, actions} = props;
   const serial = state.serial;
-  const season = state.season || serial.seasons[0];
-  const episode = season.episodes[0];
+  const season = state.season;
+  const episode = state.episode || season.episodes[0];
   return (
     <div>
       <div className="screen" style={{backgroundImage: 'url(' + "http://image.tmdb.org/t/p/original" + serial.tmdb.backdrop_path + ')'}}>
@@ -104,7 +85,7 @@ export default function Serial({state, Link, actions}) {
                 {
                   serial.seasons.map((season, index) => (
                     <li role="presentation" key={season.number}>
-                      <a role="menuitem" tabIndex="-1" onClick={seasonClick.bind(null, {index, actions, state})}>Season {season.number}</a>
+                      <a role="menuitem" tabIndex="-1" onClick={seasonClick.bind(null, {index, actions})}>Season {season.number}</a>
                     </li>
                   )) 
                 }
@@ -116,12 +97,12 @@ export default function Serial({state, Link, actions}) {
               <div className="episodes">
               {
                 season.episodes.map((episode, index) => (
-                  <div key={index}>{episode.name}</div>
+                  <div key={index} onClick={episodeClick.bind(null, {index, actions, state})}>{episode.name}</div>
                 ))
               }
               </div>
               <div className="player-wrapper">
-                <video controls="" name="media" style={{width: '100%'}}></video>
+                <Video {...props}/>
               </div>
               <div className="subtitles-list">
               {

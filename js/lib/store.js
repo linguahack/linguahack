@@ -7,7 +7,7 @@ export default class Store {
 
     this._actions = {};
     for (var k in actions) {
-      this._actions[k] = {dispatch: ::this.dispatch}::actions[k];
+      this._actions[k] = this::actions[k];
     }
   }
 

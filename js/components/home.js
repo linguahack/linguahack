@@ -1,7 +1,7 @@
 
 import React from 'react';
 
-function SubHeader({Link}) {
+function SubHeader(props) {
   return <div>
     <section id="header">
       <div className="row">
@@ -22,25 +22,25 @@ function SubHeader({Link}) {
     <section className="about">
       <div className="container">
         <h2>Learning English can be fun and addictive! Check out our 
-        <Link view="about"> How it works </Link>page and start getting better at English today.</h2>
+        <a href="/about" onClick={props.actions.linkClick({view: 'about'})}> How it works </a>page and start getting better at English today.</h2>
       </div>  
     </section>
   </div>
 }
 
-function Serial({Link, serial}) {
+function Serial({serial, actions}) {
   return <div className="show col-md-3">
-    <Link view='serial' id={serial.url}>
+    <a href="/" onClick={actions.linkClick({view: 'serial', url: serial.url})}>
       <img src={"http://image.tmdb.org/t/p/w342/" + serial.tmdb.poster_path}/>
-    </Link>
-    <Link view='serial' id={serial.url}>
+    </a>
+    <a href="/" onClick={actions.linkClick({view: 'serial', url: serial.url})}>
       {serial.name}
-    </Link>
+    </a>
   </div>
 }
 
 export default function Home(props) {
-  const {state, Link} = props;
+  const {state} = props;
   return <div>
     <SubHeader {...props}/>
     <div>

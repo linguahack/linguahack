@@ -64,7 +64,7 @@ app.use((req, res) => res.send(html));
 
 function run(app, port) {
   app.listen(process.env.PORT || port, function() {
-    console.log('App is now running on http://localhost:' + process.env.PORT || port);
+    console.log('App is now running on http://localhost:' + (process.env.PORT || port));
   });
 }
 
