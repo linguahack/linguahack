@@ -6,6 +6,7 @@ const express = require('express');
 const webpack = require('webpack');
 
 const isProduction = process.env.NODE_ENV == 'production';
+const enviroment = process.env.NODE_ENV;
 
 const compiler = webpack({
   entry: path.resolve(__dirname, 'js', 'index.js'),
@@ -56,6 +57,7 @@ const html = `
   <body>
       <div id="root"></div>
       ${!isProduction ? "<script src='/webpack-dev-server.js'></script>" : ""}
+      <script>window.ENV = "${enviroment || ""}"</script>
       <script src="/bundle.js"></script>
   </body>
 `
