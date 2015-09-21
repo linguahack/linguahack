@@ -1,5 +1,6 @@
 
 import * as api from '../tools/api'
+import fsParse from '../tools/fsParse';
 
 export const goToHome = async function() {
   this.dispatch({view: 'index', type: 'changedView'});
@@ -21,8 +22,11 @@ export const selectSeason = function(index) {
   this.dispatch({type: 'seasonSelected', index});
 }
 
-export const selectEpisode = function(index, state) {
-  
+export const selectEpisode = async function(index, state) {
+  const episode = state.season.episodes[index];
+  const fsto = await fsParse(state.serial.fsto.id, episode.fsto.files[0].file_id, episode.number);
+  const link = `http://fs.to${fsto.link}`;
+  this.dispatch({type: 'episodeSelected', index, link});
 }
 
 

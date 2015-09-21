@@ -1,53 +1,6 @@
 
-import React, {Component} from 'react';
-import api from '../tools/api';
-import fsParse from '../tools/fsParse';
-import getSubs from '../tools/getSubs';
-
-
-function selectEpisode(number) {
-  this.state.episode = this.state.season.episodes[number];
-  return fsParse(this.state.serial.fsto.id, this.state.episode.fsto.files[0].file_id, this.state.episode.number)
-  .then((result) => {
-    this.state.episode.link = 'http://fs.to' + result.link;
-    console.log(result.link);
-    this.setState(this.state);
-  });
-}
-
-function selectSubtitles(number) {
-  var trackLink = this.state.episode.opensubtitles[number].SubDownloadLink;
-
-  return getSubs(trackLink, api.getHost())
-  .then((cues) => {
-
-    if (this.state.textTrack) {
-      this.state.textTrack.mode = "hidden";
-    }
-
-    this.state.textTrack = React.findDOMNode(this.refs.videoElement).addTextTrack("captions", "English", "en");
-    this.state.textTrack.mode = "showing";
-    for(var i = 0; i < cues.length; ++i) {
-      this.state.textTrack.addCue(cues[i]);
-    }
-
-  })
-}
-
-function playVideo() {
-  var videoElement = React.findDOMNode(this.refs.videoElement);
-  videoElement.src = this.state.episode.link;
-  videoElement.setAttribute("controls", "controls")
-  videoElement.load();
-  videoElement.play();
-}
-
-
-class Video extends Component {
-  render() {
-    return <video controls="" name="media" style={{width: '100%'}}></video>;
-  }
-}
+import React from 'react';
+import Player from './player';
 
 const episodeClick = ({index, actions, state}) => {
   actions.selectEpisode(index, state);
@@ -101,18 +54,7 @@ export default function Serial(props) {
                 ))
               }
               </div>
-              <div className="player-wrapper">
-                <Video {...props}/>
-              </div>
-              <div className="subtitles-list">
-              {
-                episode.opensubtitles.map((subs, index) => (
-                  <div key={index}>
-                    <a>{subs.SubFileName}</a>
-                  </div>
-                ))
-              }
-              </div>
+              <Player {...props}/>
           </div>
       </section>
     </div>
