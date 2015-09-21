@@ -1,4 +1,5 @@
 
+import _getSubs from './getSubs';
 
 const HOST = "http://127.0.0.1:3001";
 
@@ -17,3 +18,5 @@ export function serial(serialUrl) {
     return result.json();
   });
 }
+
+export const getSubs = (trackLink) => _getSubs(trackLink, HOST)

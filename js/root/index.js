@@ -8,7 +8,6 @@ import * as actions from './actions';
 import * as reducers from './reducers';
 import App from './app';
 
-import {saveState} from '../lib/browser';
 
 class Root extends Component {
   constructor() {

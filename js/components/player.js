@@ -1,13 +1,13 @@
 
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import getSubs from '../tools/getSubs';
+import * as api from '../tools/api';
 
 
 function selectSubtitles(number) {
   var trackLink = this.state.episode.opensubtitles[number].SubDownloadLink;
 
-  return getSubs(trackLink, api.getHost())
+  return api.getSubs(trackLink)
   .then((cues) => {
 
     if (this.state.textTrack) {
@@ -26,17 +26,35 @@ function selectSubtitles(number) {
 
 export default class Player extends Component {
 
-  playVideo() {
-    var videoElement = ReactDOM.findDOMNode(this.refs.videoElement);
-    videoElement.src = this.props.state.episode.link;
-    videoElement.setAttribute("controls", "controls")
-    videoElement.load();
-    videoElement.play();
+  componentDidMount() {
+    this.videoElement = ReactDOM.findDOMNode(this.refs.videoElement);
   }
 
   componentDidUpdate() {
     if (this.props.state.episode.link) {
       this.playVideo();
+    }
+  }
+
+  playVideo() {
+    this.videoElement.src = this.props.state.episode.link;
+    this.videoElement.setAttribute("controls", "controls")
+    this.videoElement.load();
+    this.videoElement.play();
+  }
+
+  async selectSubtitles(number) {
+    const trackLink = this.props.state.episode.opensubtitles[number].SubDownloadLink;
+    const cues = await api.getSubs(trackLink);
+
+    if (this.textTrack) {
+      this.textTrack.mode = "hidden";
+    }
+
+    this.textTrack = this.videoElement.addTextTrack("captions", "English", "en");
+    this.textTrack.mode = "showing";
+    for(var i = 0; i < cues.length; ++i) {
+      this.textTrack.addCue(cues[i]);
     }
   }
 
@@ -50,7 +68,7 @@ export default class Player extends Component {
       {
         episode.opensubtitles.map((subs, index) => (
           <div key={index}>
-            <a>{subs.SubFileName}</a>
+            <a onClick={this.selectSubtitles.bind(this, index)}>{subs.SubFileName}</a>
           </div>
         ))
       }

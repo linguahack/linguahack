@@ -3,7 +3,7 @@
 export default function(opensubtitlesGzUrl, apiHost) {
   return new Promise(function(resolve, reject) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', apiHost + '/subtitles/convert?url=' + opensubtitlesGzUrl);
+    xhr.open('GET', apiHost + '/serials/subtitles/convert?url=' + opensubtitlesGzUrl);
     // xhr.responseType = 'blob';
     xhr.onload = function (e) {
       resolve(getVttCues(this.response));
