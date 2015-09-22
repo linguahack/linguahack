@@ -1,22 +1,66 @@
 
 import _getSubs from './getSubs';
+import { api_server  } from '../config';
 
-const HOST = "http://127.0.0.1:3001";
-
-export function getHost() {
-  return HOST;
+function graphql(query, variables) {
+  return fetch(api_server + '/graphql', {
+    method: 'POST',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify(variables ? { query, variables: JSON.stringify(variables) } : { query }),
+  }).then(response => response.json());
 }
 
+
 export function serials() {
-  return fetch(HOST + '/serials')
-  .then((res) => res.json());
+  const query = `{
+    serials {
+      name
+      url
+      tmdb {
+        id
+        poster_path
+      }
+    }
+  }`
+  return graphql(query).then((res) => res.data.serials);
 }
 
 export function serial(serialUrl) {
-  return fetch(HOST + '/serials/id/' + serialUrl)
-  .then(function(result) {
-    return result.json();
-  });
+  const query = `query Q($url: String!){
+    serial(url: $url) {
+      url
+      name
+      imdb {
+        id
+        rating
+        description
+      }
+      tmdb {
+        backdrop_path
+      }
+      fsto {
+        id
+      }
+      seasons {
+        number
+        episodes {
+          name
+          number
+          opensubtitles {
+            SubFileName
+            SubDownloadLink
+          }
+          fsto {
+            files {
+              file_id    
+            }
+          }
+        }
+      }
+    }
+  }`;
+  return graphql(query, {url: serialUrl}).then((res) => res.data.serial);
 }
 
-export const getSubs = (trackLink) => _getSubs(trackLink, HOST)
+
+export const getSubs = (trackLink) => _getSubs(trackLink, api_server)
