@@ -12,7 +12,9 @@ import App from './app';
 class Root extends Component {
   constructor() {
     super();
-    const initialState = window.ENV ? null : (localStorage.state ? JSON.parse(localStorage.state) : {view: 'index'});
+    // const initialState = window.ENV ? null :
+    //   (localStorage.state ? JSON.parse(localStorage.state) : {view: 'index'});
+    const initialState = null;
     this.store = new Store({reducers, actions, initialState});
     if (!initialState) {
       this.store.actions.goToHome();
